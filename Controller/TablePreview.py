@@ -17,7 +17,7 @@ class TablePreview:
             self.view = TablePreviewView(window)
 
             # Wyciąganie wszystkich danych z tej tabeli
-            self.tableContent = window.modelConnection.SelectAll(tableName)
+            #self.tableContent = window.modelConnection.SelectAll(tableName)
             self.tableList()
             self.view.render()
 

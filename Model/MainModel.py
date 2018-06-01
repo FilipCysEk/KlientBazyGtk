@@ -1,5 +1,5 @@
 import mysql.connector
-from mysql.connector import errorcode
+from mysql.connector import errorcode, FieldType
 
 from error import *
 
@@ -104,11 +104,16 @@ class MainModel:
             cursor.execute(sql)
             result = cursor.fetchall()
             colnames = cursor.column_names
+            fieldTypes = []
             #print(result)
             #print(colnames)
 
+            #typy kolumn
+            for desc in cursor.description:
+                fieldTypes.append(FieldType.get_info(desc[1]))
+
             cursor.close()
-            return (colnames, result)
+            return (colnames, result, fieldTypes)
 
         except mysql.connector.Error as err:
             raise ErrorClass(0, "Błąd zapytania", str(err))

@@ -2,6 +2,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
+import datetime
+
 class TablePreviewView(Gtk.Window):
     def __init__(self, window = Gtk.Window):
         #Gtk.Window.__init__(parent)
@@ -49,7 +51,43 @@ class TablePreviewView(Gtk.Window):
         print(objList)
         colnames = objList[0]
         result = objList[1]
+        dataTypes = objList[2]
+        print(dataTypes)
+        print(result)
 
+        coltypes = []
+        result1 = []
+        colnum = 0
+
+        for i in range(len(result)):
+            result1.append([row for row in result[i]])
+
+        for type in dataTypes:
+            if type == 'LONG':
+                coltypes = coltypes + [int]
+            elif type == 'FLOAT':
+                coltypes = coltypes + [float]
+            elif type == 'DOUBLE':
+                coltypes = coltypes + [float]
+            elif type == 'VAR_STRING':
+                coltypes = coltypes + [str]
+            elif type == 'BLOB':
+                coltypes = coltypes + [str]
+            elif type == 'NEWDECIMAL':
+                coltypes = coltypes + [float]
+            elif type == 'DATE':
+                coltypes = coltypes + [str]
+
+                for i in range(len(result)):
+                    result1[i][colnum] = str(result1[i][colnum])
+            elif type == 'DATETIME':
+                coltypes = coltypes + [str]
+
+                for i in range(len(result)):
+                    result1[i][colnum] = str(result1[i][colnum])
+
+            colnum += 1
+        '''
         if len(result) == 0:
             coltypes = [str] * len(colnames)
         else:
@@ -62,10 +100,10 @@ class TablePreviewView(Gtk.Window):
                 if temp == type(None):
                     temp = str
                 coltypes = coltypes + [temp]
-
+        '''
         print(coltypes)
         self.tableListObj = Gtk.ListStore(*coltypes)
-        for row in result:
+        for row in result1:
             self.tableListObj.append(row)
 
 
