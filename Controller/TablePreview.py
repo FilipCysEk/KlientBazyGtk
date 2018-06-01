@@ -24,6 +24,9 @@ class TablePreview:
             self.view.button_delete_table.connect("clicked", self.deleteTable)
             self.view.button_back.connect("clicked", self.backToTableList)
 
+            select = self.view.tableListView.get_selection()
+            select.connect("changed", self.deleteRow)
+
         except ErrorClass as err:
             ErrorPrompt(err)
 
@@ -49,5 +52,11 @@ class TablePreview:
         child.destroy()
         del self.view
         self.window.changeWindowContent("tableList")
+
+    def deleteRow(self, widget):
+        response = self.view.confirmDeleteRow()
+
+        if response == Gtk.ResponseType.YES:
+            print("QUESTION dialog closed by clicking YES button")
 
 

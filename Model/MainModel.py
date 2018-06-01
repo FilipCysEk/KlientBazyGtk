@@ -137,3 +137,23 @@ class MainModel:
 
             return True
 
+    def deleteRow(self, tableName, rowData, rowTitle):
+        if tableName == None or len(tableName) == 0 or rowData == None or len(rowData) == 0 or rowTitle == None or len(rowTitle) == 0:
+            raise ErrorClass(0, "Błąd danych", "Brak danych", "Błąd przekazanych danych do funkcji")
+        else:
+            try:
+                sql = "DELETE FROM "
+                sql += tableName
+                sql += " WHERE "
+
+
+                cursor = self.connection.cursor()
+
+                cursor.execute(sql)
+
+            except mysql.connector.Error as err:
+                raise ErrorClass(0, "Błąd zapytania", str(err))
+                return False
+
+            return True
+

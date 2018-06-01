@@ -29,12 +29,14 @@ class TablePreviewView(Gtk.Window):
 
         #Przycisk powrotu
         self.button_back = Gtk.Button("<- Powrót")
-        self.button_delete_table.set_size_request(100, 20)
+        self.button_back.set_size_request(100, 20)
         self.fixed.put(self.button_back, 10, 10)
 
         #przcisk nowego wiersza
-        self.button_new_row = Gtk.Button()
-
+        self.button_new_row = Gtk.Button("Nowy wiersz")
+        self.button_new_row.set_size_request(100, 20)
+        self.fixed.put(self.button_new_row, self.window.get_size()[0] - 60 - self.button_delete_table.get_size_request()[0]
+                       - self.button_new_row.get_size_request()[0], 10)
 
         #Lista tabel
         #self.tableListView.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 200)
@@ -48,12 +50,9 @@ class TablePreviewView(Gtk.Window):
         self.window.show_all()
 
     def tableListRender(self, objList):
-        print(objList)
         colnames = objList[0]
         result = objList[1]
         dataTypes = objList[2]
-        print(dataTypes)
-        print(result)
 
         coltypes = []
         result1 = []
@@ -101,7 +100,7 @@ class TablePreviewView(Gtk.Window):
                     temp = str
                 coltypes = coltypes + [temp]
         '''
-        print(coltypes)
+        #print(coltypes)
         self.tableListObj = Gtk.ListStore(*coltypes)
         for row in result1:
             self.tableListObj.append(row)
@@ -133,3 +132,11 @@ class TablePreviewView(Gtk.Window):
 
         message.destroy()
         return answer
+
+    def confirmDeleteRow(self):
+        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.WARNING,
+                                   Gtk.ButtonsType.YES_NO, "Czy napewno chcesz usunąć wiersz?")
+        dialog.format_secondary_text("And this is the secondary text that explains things.")
+        temp = dialog.run()
+        dialog.destroy()
+        return temp
