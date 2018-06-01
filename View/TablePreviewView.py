@@ -30,6 +30,9 @@ class TablePreviewView(Gtk.Window):
         self.button_delete_table.set_size_request(100, 20)
         self.fixed.put(self.button_back, 10, 10)
 
+        #przcisk nowego wiersza
+        self.button_new_row = Gtk.Button()
+
 
         #Lista tabel
         #self.tableListView.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 200)
