@@ -1,4 +1,4 @@
-import gi
+import gi, re
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
 
@@ -48,6 +48,14 @@ class TablePreviewView(Gtk.Window):
 
         self.window.add(self.fixed)
         self.window.show_all()
+
+    def tableListRefresh(self, objList):
+        print("refresh")
+        self.tableListObj.clear()
+        #self.tableListView.destroy()
+        self.tableListRender(objList)
+        self.window.show_all()
+
 
     def tableListRender(self, objList):
         colnames = objList[0]
@@ -102,16 +110,18 @@ class TablePreviewView(Gtk.Window):
         '''
         #print(coltypes)
         i = 0
-        self.tableListObj = Gtk.ListStore(*coltypes)
+
+        if self.tableListObj == None:
+            self.tableListObj = Gtk.ListStore(*coltypes)
+
         for row in result1:
             row = [i] + row
             i += 1
             self.tableListObj.append(row)
 
-
         self.tableListView = Gtk.TreeView(self.tableListObj)
 
-        print(colnames)
+        #print(colnames)
         colnames = ("nr",) + colnames
 
         for i, col_title in enumerate(colnames):
@@ -146,3 +156,62 @@ class TablePreviewView(Gtk.Window):
         temp = dialog.run()
         dialog.destroy()
         return temp
+
+class CreateNewRowDialog(Gtk.Dialog):
+    def __init__(self, parent, colnames, coltypes):
+        Gtk.Dialog.__init__(self, "Dodaj nowy wiersz", parent, Gtk.DialogFlags.MODAL,
+                                  (Gtk.STOCK_OK, Gtk.ResponseType.OK,
+                                   Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+
+
+
+        #self.set_default_size(300, 400)
+
+        # Tworzenie tabeli
+        self.row_num = 2
+        self.table = Gtk.Grid(column_spacing=20, row_spacing=15, margin_bottom=15, margin_top=15, margin_left=15,
+                              margin_right=15)
+
+        # Tworzenie przewijanej przestrzeni
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_size_request(500, 375)
+
+        # pierwszy wiersz
+        #self.addToTable([Gtk.Label("Nazwa kolumny"), Gtk.Label("Typ"), Gtk.Label("Rozmiar")])
+
+        # tablica zmiennych
+        self.valuesRow = []
+
+        # Tworzenie listy pól
+        for i in range(len(colnames)):
+            label = Gtk.Label(colnames[i])
+            self.table.attach(label, 0, self.row_num, 1, 1)
+
+            entry = Gtk.Entry()
+            self.table.attach(entry, 1, self.row_num, 1, 1)
+
+            label = Gtk.Label(coltypes[i])
+            self.table.attach(label, 2, self.row_num, 1, 1)
+
+            self.valuesRow.append((colnames[i], entry, coltypes[i]))
+            #print([colnames[i], entry, coltypes[i]])
+
+            self.row_num += 1
+
+        # rysowanie
+
+        self.area = self.get_content_area()
+        scroll.add(self.table)
+        self.area.add(scroll)
+        self.show_all()
+
+    def createErrorMessage(self, error):
+        message = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                                    "Błąd dodawania wiersza")
+        message.format_secondary_text(str(error))
+        message.run()
+
+        message.destroy()
+
+    def closeWindow(self, widget = None):
+        self.destroy()

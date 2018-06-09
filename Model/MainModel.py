@@ -155,7 +155,6 @@ class MainModel:
                 sql += " WHERE "
 
                 for i in range(len(rowData)):
-                    print(type(rowData[i]))
                     sql += rowTitle[i]\
                     #+ "="
                     if rowData[i] == None:
@@ -170,16 +169,57 @@ class MainModel:
                     sql += " AND "
 
                 sql = sql[:-5]
-                print(sql)
+                #print(sql)
 
 
                 cursor = self.connection.cursor()
 
                 cursor.execute(sql)
+                self.connection.commit()
 
             except mysql.connector.Error as err:
                 raise ErrorClass(0, "Błąd zapytania", str(err))
                 return False
 
             return True
+
+    def addRowToTable(self, tableName, colnames, data):
+        if tableName == None or colnames == None or len(colnames) == 0 or data == None or len(data) == 0:
+            raise ErrorClass(0, "Błąd danych", "Brak danych", "Błąd przekazanych danych do funkcji")
+        else:
+            try:
+                sql = "INSERT INTO "
+                sql += tableName
+                sql += " ( "
+
+                for colname in colnames:
+                    sql += colname + ","
+
+                sql = sql[:-1]
+                sql += ") VALUES ("
+
+                for dataOne in data:
+                    sql += dataOne + ","
+
+                #for i in data:
+                #   sql += "%s,"
+
+                sql = sql[:-1]
+                sql += ")"
+                print(sql)
+
+
+                cursor = self.connection.cursor()
+                #cursor.execute(sql, data)
+                cursor.execute(sql)
+
+                self.connection.commit()
+
+            except mysql.connector.Error as err:
+                print(err)
+                raise ErrorClass(0, "Błąd zapytania", str(err))
+                return False
+
+            return True
+
 
