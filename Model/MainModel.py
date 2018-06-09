@@ -206,7 +206,7 @@ class MainModel:
 
                 sql = sql[:-1]
                 sql += ")"
-                print(sql)
+                #print(sql)
 
 
                 cursor = self.connection.cursor()

@@ -17,7 +17,7 @@ class TablePreviewView(Gtk.Window):
         #Rysujemy okno
         self.window.show()
         self.fixed = Gtk.Fixed()
-        scroll = Gtk.ScrolledWindow()
+        self.scroll = Gtk.ScrolledWindow()
 
 
         #Przycisk usuwania tabeli
@@ -38,22 +38,29 @@ class TablePreviewView(Gtk.Window):
         self.fixed.put(self.button_new_row, self.window.get_size()[0] - 60 - self.button_delete_table.get_size_request()[0]
                        - self.button_new_row.get_size_request()[0], 10)
 
+        #Przycisk usuwania
+        self.button_delete_row = Gtk.Button("Usuń wiersz")
+        self.button_delete_row.set_size_request(100, 20)
+        self.button_delete_row.override_background_color(0, Gdk.RGBA(1, 0, 0, 1))
+        self.button_delete_row.override_color(0, Gdk.RGBA(1, 1, 1, 1))
+        self.fixed.put(self.button_delete_row, 10, self.window.get_size()[1]-60)
+
         #Lista tabel
         #self.tableListView.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 200)
 
         #self.fixed.put(self.tableListView, 10, 70)
-        scroll.add(self.tableListView)
-        scroll.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 200)
-        self.fixed.put(scroll, 10, 70)
+        self.scroll.add(self.tableListView)
+        self.scroll.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 200)
+        self.fixed.put(self.scroll, 10, 70)
 
         self.window.add(self.fixed)
         self.window.show_all()
 
     def tableListRefresh(self, objList):
-        print("refresh")
         self.tableListObj.clear()
         #self.tableListView.destroy()
         self.tableListRender(objList)
+        #self.scroll.add(self.tableListView)
         self.window.show_all()
 
 
