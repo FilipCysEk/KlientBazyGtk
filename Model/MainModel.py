@@ -1,4 +1,5 @@
 import mysql.connector
+import datetime
 from mysql.connector import errorcode, FieldType
 
 from error import *
@@ -138,6 +139,13 @@ class MainModel:
             return True
 
     def deleteRow(self, tableName, rowData, rowTitle):
+        '''
+        Function deleted row in table
+        :param tableName: Name of table
+        :param rowData: data existing in row
+        :param rowTitle: column names
+        :return:
+        '''
         if tableName == None or len(tableName) == 0 or rowData == None or len(rowData) == 0 or rowTitle == None or len(rowTitle) == 0:
             raise ErrorClass(0, "Błąd danych", "Brak danych", "Błąd przekazanych danych do funkcji")
         else:
@@ -145,6 +153,24 @@ class MainModel:
                 sql = "DELETE FROM "
                 sql += tableName
                 sql += " WHERE "
+
+                for i in range(len(rowData)):
+                    print(type(rowData[i]))
+                    sql += rowTitle[i]\
+                    #+ "="
+                    if rowData[i] == None:
+                        sql += " IS NULL"
+                    elif isinstance(rowData[i], str):
+                        sql += "='" + rowData[i] + "'"
+                    elif isinstance(rowData[i], datetime.date):
+                        sql += "='" + str(rowData[i]) + "'"
+                    else:
+                        sql += "=" + str(rowData[i])
+
+                    sql += " AND "
+
+                sql = sql[:-5]
+                print(sql)
 
 
                 cursor = self.connection.cursor()

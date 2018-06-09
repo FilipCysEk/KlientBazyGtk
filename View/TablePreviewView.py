@@ -54,7 +54,7 @@ class TablePreviewView(Gtk.Window):
         result = objList[1]
         dataTypes = objList[2]
 
-        coltypes = []
+        coltypes = [int]
         result1 = []
         colnum = 0
 
@@ -101,12 +101,18 @@ class TablePreviewView(Gtk.Window):
                 coltypes = coltypes + [temp]
         '''
         #print(coltypes)
+        i = 0
         self.tableListObj = Gtk.ListStore(*coltypes)
         for row in result1:
+            row = [i] + row
+            i += 1
             self.tableListObj.append(row)
 
 
         self.tableListView = Gtk.TreeView(self.tableListObj)
+
+        print(colnames)
+        colnames = ("nr",) + colnames
 
         for i, col_title in enumerate(colnames):
             renderer = Gtk.CellRendererText()
@@ -136,7 +142,7 @@ class TablePreviewView(Gtk.Window):
     def confirmDeleteRow(self):
         dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.WARNING,
                                    Gtk.ButtonsType.YES_NO, "Czy napewno chcesz usunąć wiersz?")
-        dialog.format_secondary_text("And this is the secondary text that explains things.")
+        #dialog.format_secondary_text("And this is the secondary text that explains things.")
         temp = dialog.run()
         dialog.destroy()
         return temp

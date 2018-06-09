@@ -53,10 +53,19 @@ class TablePreview:
         del self.view
         self.window.changeWindowContent("tableList")
 
-    def deleteRow(self, widget):
+    def deleteRow(self, selected):
         response = self.view.confirmDeleteRow()
+
+        model, row = selected.get_selected()
+
+        rowData = self.tableContent[1][model[row][0]]
+        print(rowData)
+        #for row in model[row]:
+            #print(row)
+        #    rowData.append(row)
 
         if response == Gtk.ResponseType.YES:
             print("QUESTION dialog closed by clicking YES button")
+            self.window.modelConnection.deleteRow(self.table_name, rowData, self.tableContent[0])
 
 
