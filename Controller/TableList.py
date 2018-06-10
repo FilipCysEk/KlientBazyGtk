@@ -17,6 +17,7 @@ class TableList:
 
             #self.window.changeWindowContent("TableList")
             self.view.button_new_table.connect("clicked", self.createTable)
+            self.view.button_sql_console.connect("clicked", self.goToConsole)
             select = self.view.tableListView.get_selection()
             select.connect("changed", self.goToTablePreview)
 
@@ -138,4 +139,11 @@ class TableList:
         child.destroy()
         del self.view
         self.window.changeWindowContent("tablePreview", model[row][0])
+
+    def goToConsole(self, selection):
+
+        child = self.window.get_child()
+        child.destroy()
+        del self.view
+        self.window.changeWindowContent("console")
 

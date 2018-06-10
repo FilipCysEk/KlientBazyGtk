@@ -9,6 +9,7 @@ from Controller.Login import *
 from Controller.TableList import *
 from Controller.TablePreview import *
 from Model.MainModel import *
+from Controller.SqlConsole import *
 
 
 
@@ -33,6 +34,8 @@ class MainClass(Gtk.Window):
             if date == None or len(date) == 0:
                 raise ErrorClass(1, "Błąd krytyczny", "Nie udało się załadować podglądu tabeli", "Nieprzekazano nazwy tabeli")
             self.controller = TablePreview(self, date)
+        elif content == "console":
+            self.controller = SqlConsole(self)
         else:
             raise ErrorClass(1, "Błąd krytyczny", "Nie wiem co się stało, nie potrafię stworzyć kolejnego okna",
                              "Nie odnaleziono kontrollera!!!!")

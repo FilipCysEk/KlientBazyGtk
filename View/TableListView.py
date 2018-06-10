@@ -75,6 +75,11 @@ class TableListView(Gtk.Window):
         self.button_new_table.set_size_request(100, 20)
         self.fixed.put(self.button_new_table, 10, 10)
 
+        # Przycisk konsoli SQL
+        self.button_sql_console = Gtk.Button("Konsola SQL")
+        self.button_sql_console.set_size_request(100, 20)
+        self.fixed.put(self.button_sql_console, 200, 10)
+
         #Lista tabel
         self.tableListView.set_size_request(self.window.get_size()[0] - 40, self.window.get_size()[1] - 150)
 

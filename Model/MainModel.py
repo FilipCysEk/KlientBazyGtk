@@ -222,4 +222,26 @@ class MainModel:
 
             return True
 
+    def runSql(self, sql):
+        if sql == None or len(sql) == 0:
+            raise ErrorClass(1, "Błąd komunikacji w programie", "Błąd!!", "Nieprzekazano nazwy tabeli, z której mamy wyciągnąć dane")
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            colnames = cursor.column_names
+            fieldTypes = []
+            #print(result)
+            #print(colnames)
+
+            #typy kolumn
+            for desc in cursor.description:
+                fieldTypes.append(FieldType.get_info(desc[1]))
+
+            cursor.close()
+            return (colnames, result, fieldTypes)
+
+        except mysql.connector.Error as err:
+            raise ErrorClass(0, "Błąd zapytania", str(err))
+            return False
 
